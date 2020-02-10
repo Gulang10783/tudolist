@@ -1,0 +1,99 @@
+*{
+	margin: 0;
+	padding: 0;
+	box-sizing: border-box;
+	
+}
+
+body{
+	font-size: 0.2rem;
+	background: #CDCDCD;
+}
+.top{
+	width: 3.75rem;
+	height: 0.5rem;
+	background: rgba(47,47,47,0.98);
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	padding: 0.02rem 0.1rem;
+}
+.left{
+	color: white;
+}
+.right{
+}
+.right #input{
+	width: 2.3rem;
+	height: 0.35rem;
+	border-radius: 0.05rem;
+	outline: none;
+	border: 1px solid white;
+	font-size: 0.2rem;
+	padding-left: 0.1rem;
+}
+
+/* 底下 */
+.undone h2,.done h2{
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	margin: 0.2rem 0 ;
+}
+h2 .title{
+	font-size: 0.3rem;
+	padding: 0 0.1rem;
+}
+h2 .num{
+	font-size: 0.14rem;
+	margin: 0 0.1rem;
+	display: inline-block;
+	width: 0.3rem;
+	height: 0.3rem;
+	border-radius: 0.15rem;
+	background-color: #FFFFFF;
+	text-align: center;
+	line-height: 0.3rem;
+	
+}
+.listItem{
+	width: 3.6rem;
+	background: #FFFFFF;
+	border-radius: 0.05rem;
+	display: flex;
+	align-items: center;
+	margin: 0.1rem auto;
+	position: relative;
+	border-left: 5px solid #629A9C;
+}
+.listItem .content{
+	width: 3.1rem;
+	font-size: 0.16rem;
+	line-height: 0.32rem;
+}
+.listItem .checkbox,.listItem .delete{
+	flex: 1;
+	display: flex;
+	justify-content: center;
+	padding: 0 0.1rem;
+	
+	
+}
+.listItem .delete{
+	width: 0.25rem;
+	height: 0.25rem;
+	border-radius: 0.125rem;
+	background: #ccc;
+	color: white;
+	font-weight: 900;
+	position: absolute;
+	right: 0.05rem;
+	
+}
+.listItem .checkbox input{
+	width: 0.22rem;
+	height: 0.22rem;
+}
+.done .listItem{
+	opacity: 0.5;
+}

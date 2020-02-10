@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<title></title>
+		<script src="js/rem.js" type="text/javascript" charset="utf-8"></script>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<link rel="stylesheet" type="text/css" href="css/style.css" />
+	</head>
+	<body>
+		<div class="top">
+			<div class="left">
+				GulangList
+			</div>
+			<div class="right">
+				<input type="text" id="input" />
+			</div>
+		</div>
+		<div class="undone">
+			<h2><span class="title">正在进行</span><span class="num">0</span></h1>
+
+				<div class="list">
+					
+				</div>
+		</div>
+		<div class="done">
+			<h2><span class="title">已经完成</span><span class="num">0</span></h1>
+				<div class="list">
+					
+				</div>
+		</div>
+
+
+		<script type="text/javascript">
+			var input = document.querySelector('#input')
+			var undone = document.querySelector('.undone .list')
+			var done = document.querySelector('.done .list')
+/* 			var undonedel = document.querySelector('.undone .delete')
+			var donedel = document.querySelector('.done .delete') */
+			
+			if(localStorage.undone){
+				// 将字符串转换为数组
+				var undoneList = JSON.parse(localStorage.undone)
+				RenderUnDone()
+			}else{
+				var undoneList = []
+			}
+			if(localStorage.done){
+				var doneList = JSON.parse(localStorage.done)
+				RenderDone()
+			}else{
+				var doneList = []
+			}
+			
+			
+			
+			input.addEventListener('keydown', function(e) {
+
+				if (e.key == 'Enter'&&this.value!="") {
+					console.log(this.value)
+					var value = this.value
+					var newDiv = document.createElement('div')
+					newDiv.className = "listItem"
+					newDiv.dataset.index = undoneList.length
+					newDiv.innerHTML =
+						`
+					<div class="checkbox">
+						<input type="checkbox" name="" id="" value="" />
+					</div>
+					<div class="content">
+						` +
+						value + `
+					</div>
+					<div class="delete">
+						-
+					</div>
+					`
+					undone.appendChild(newDiv)
+					
+					newDiv.addEventListener('click',function(e){
+						console.log(e)
+						if(e.target.tagName =='DIV'){
+							newDiv.parentElement.removeChild(newDiv)
+							if(e.path[4].className =='done'){
+								var index = e.path[2].dataset.index
+								undoneList.splice(index)
+							}else{
+								var index = e.path[2].dataset.index
+								doneList.splice(index)
+							}
+							console.log(undoneList)
+							console.log(doneList)
+							countNode()
+						}
+					})
+					undoneList.push(value)
+					
+					countNode()
+					this.value = ""
+				}
+			})
+
+			undone.addEventListener('change', function(e) {
+
+				var listItem = e.path[2]
+				
+				var index = e.path[2].dataset.index
+				var splice = undoneList.splice(index,1)
+				
+				e.path[2].dataset.index = doneList.length
+				
+				doneList = doneList.concat(splice)
+				
+				console.log(undoneList)
+				console.log(doneList)
+				done.appendChild(listItem)
+				countNode()
+				
+			})
+			done.addEventListener('change',function(e){
+				console.log(e)
+				var listItem = e.path[2]
+				
+				
+				var index = e.path[2].dataset.index
+				var splice = doneList.splice(index,1)
+				
+				e.path[2].dataset.index = undoneList.length
+				
+				undoneList = undoneList.concat(splice)
+				console.log(undoneList)
+				console.log(doneList)
+				undone.appendChild(listItem)
+				countNode()
+			})
+		/* 	undonedel.addEventListener('click',function(e){
+				console.log(e)
+				var listItem = e.path[1]
+				undone.removeChild(listItem)
+				
+			}) */
+			
+/* 			donedel.addEventListener('click',function(e){
+				console.log(e)
+				var listItem = e.path[1]
+				done.removeChild(listItem)
+				
+			}) */
+			
+			function countNode(){
+				var undoneNum = undone.childElementCount
+
+				document.querySelector('.undone .num').innerHTML = undoneNum
+				for (var i = 0;i<undoneNum;i++){
+					undone.children[i].dataset.index = i
+				}
+				var doneNum = done.childElementCount
+				document.querySelector('.done .num').innerHTML = doneNum
+				for (var i = 0;i<doneNum;i++){
+					done.children[i].dataset.index = i
+				}
+				
+				var undoneStr = JSON.stringify(undoneList)
+				console.log(undoneStr)
+				var doneStr = JSON.stringify(doneList)
+				console.log(doneStr)
+				
+				// 本地存储只能存字符串，不能存对象
+				localStorage.undone = undoneStr
+				localStorage.done = doneStr
+			}
+			
+			function RenderDone(){
+				for(var i = 0;i<doneList.length;i++){
+					var value = doneList[i]
+					var newDiv = document.createElement('div')
+					newDiv.className = "listItem"
+					newDiv.dataset.index = i
+					newDiv.innerHTML =
+						`
+					<div class="checkbox">
+						<input type="checkbox" checked = 'checked' name="" id="" value="" />
+					</div>
+					<div class="content">
+						` +
+						value + `
+					</div>
+					<div class="delete">
+						-
+					</div>
+					`
+					done.appendChild(newDiv)
+					
+					newDiv.addEventListener('click',function(e){
+						console.log(e)
+						if(e.target.tagName =='DIV'){
+							newDiv.parentElement.removeChild(newDiv)
+							if(e.path[4].className =='done'){
+								var index = e.path[2].dataset.index
+								undoneList.splice(index)
+							}else{
+								var index = e.path[2].dataset.index
+								doneList.splice(index)
+							}
+							console.log(undoneList)
+							console.log(doneList)
+							countNode()
+						}
+					})
+
+				}
+			}
+			function RenderUnDone(){
+				for(var i = 0;i<undoneList.length;i++){
+					var value = undoneList[i]
+					var newDiv = document.createElement('div')
+					newDiv.className = "listItem"
+					newDiv.dataset.index = i
+					newDiv.innerHTML =
+						`
+					<div class="checkbox">
+						<input type="checkbox" name="" id="" value="" />
+					</div>
+					<div class="content">
+						` +
+						value + `
+					</div>
+					<div class="delete">
+						-
+					</div>
+					`
+					undone.appendChild(newDiv)
+					
+					newDiv.addEventListener('click',function(e){
+						console.log(e)
+						if(e.target.tagName =='DIV'){
+							newDiv.parentElement.removeChild(newDiv)
+							if(e.path[4].className =='done'){
+								var index = e.path[2].dataset.index
+								undoneList.splice(index)
+							}else{
+								var index = e.path[2].dataset.index
+								doneList.splice(index)
+							}
+							console.log(undoneList)
+							console.log(doneList)
+							countNode()
+						}
+					})
+				}
+			}
+		</script>
+	</body>
+</html>
